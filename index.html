@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta
+      name="description"
+      content="Aplikasi Dzikir Harian untuk dzikir pagi dan petang dengan counter, checklist, riwayat, dan PWA."
+    />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="public/icons/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Dzikir Harian</title>
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow" id="currentDate"></p>
+        <h1>Dzikir Harian</h1>
+      </div>
+      <button class="icon-button" id="openSettings" type="button" aria-label="Buka pengaturan" title="Pengaturan">
+        ⚙
+      </button>
+    </header>
+
+    <main class="shell">
+      <section class="session-bar" aria-label="Pilih waktu dzikir">
+        <button class="segment active" id="morningTab" type="button" data-type="morning">Pagi</button>
+        <button class="segment" id="eveningTab" type="button" data-type="evening">Petang</button>
+      </section>
+
+      <section class="toolbar" aria-label="Alat daftar dzikir">
+        <label class="search-box">
+          <span>Cari</span>
+          <input id="searchInput" type="search" placeholder="Judul, sumber, manfaat..." />
+        </label>
+        <button class="secondary-button" id="resetToday" type="button">Reset Hari Ini</button>
+      </section>
+
+      <nav class="page-nav" aria-label="Navigasi dzikir">
+        <button class="secondary-button" id="previousDzikir" type="button">Sebelumnya</button>
+        <div class="page-status">
+          <strong id="pageIndicator">1 / 1</strong>
+          <span id="pageTitle">Dzikir</span>
+        </div>
+        <button class="secondary-button" id="nextDzikir" type="button">Berikutnya</button>
+      </nav>
+
+      <section class="dzikir-list" id="dzikirList" aria-live="polite"></section>
+
+      <section class="progress-panel" aria-labelledby="progressTitle">
+        <div>
+          <p class="eyebrow" id="sessionHint"></p>
+          <h2 id="progressTitle">Progress hari ini</h2>
+        </div>
+        <div class="progress-grid">
+          <div class="progress-ring" id="progressRing" role="img" aria-label="Progress 0 persen">
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="stats">
+            <div>
+              <strong id="countStat">0 / 0</strong>
+              <span>Bacaan selesai</span>
+            </div>
+            <div>
+              <strong id="doneStat">0</strong>
+              <span>Dzikir selesai</span>
+            </div>
+            <div>
+              <strong id="streakStat">0</strong>
+              <span>Streak 100%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="history-panel" aria-labelledby="historyTitle">
+        <div class="section-heading">
+          <h2 id="historyTitle">Riwayat</h2>
+          <span id="historySummary"></span>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+    </main>
+
+    <aside class="drawer" id="settingsDrawer" aria-hidden="true" aria-labelledby="settingsTitle">
+      <div class="drawer-panel" role="dialog" aria-modal="true">
+        <div class="drawer-header">
+          <h2 id="settingsTitle">Pengaturan</h2>
+          <button class="icon-button" id="closeSettings" type="button" aria-label="Tutup pengaturan" title="Tutup">
+            ×
+          </button>
+        </div>
+        <label>
+          Font Arab
+          <select id="arabicFont">
+            <option value="Amiri">Amiri</option>
+            <option value="Scheherazade New">Scheherazade</option>
+            <option value="Noto Naskh Arabic">Noto Naskh Arabic</option>
+          </select>
+        </label>
+        <label>
+          Ukuran Arab
+          <input id="arabicSize" type="range" min="24" max="72" step="1" />
+          <output id="arabicSizeOut"></output>
+        </label>
+        <label>
+          Font Latin
+          <select id="latinFont">
+            <option value="Inter">Inter</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Roboto">Roboto</option>
+          </select>
+        </label>
+        <label>
+          Ukuran Latin
+          <input id="latinSize" type="range" min="12" max="32" step="1" />
+          <output id="latinSizeOut"></output>
+        </label>
+      </div>
+    </aside>
+
+    <template id="dzikirTemplate">
+      <article class="dzikir-card">
+        <div class="card-top">
+          <div>
+            <p class="card-order"></p>
+            <h2 class="card-title"></h2>
+          </div>
+          <label class="check-label">
+            <input class="complete-check" type="checkbox" />
+            <span>Selesai</span>
+          </label>
+        </div>
+        <p class="arabic" dir="rtl"></p>
+        <p class="latin"></p>
+        <details>
+          <summary>Terjemahan dan manfaat</summary>
+          <p class="translation"></p>
+          <p class="benefit"></p>
+        </details>
+        <p class="source"></p>
+        <div class="counter-row">
+          <div class="counter">
+            <button class="minus" type="button" aria-label="Kurangi bacaan">−</button>
+            <strong class="count-label"></strong>
+            <button class="plus" type="button" aria-label="Tambah bacaan">+</button>
+          </div>
+          <label class="target-label">
+            Target
+            <input class="target-input" type="number" min="1" />
+          </label>
+        </div>
+        <div class="audio-player">
+          <button class="audio-btn play" type="button" aria-label="Play">▶</button>
+          <button class="audio-btn pause" type="button" aria-label="Pause">Ⅱ</button>
+          <button class="audio-btn stop" type="button" aria-label="Stop">■</button>
+          <button class="audio-btn rewind" type="button" aria-label="Mundur 10 detik">↺10</button>
+          <button class="audio-btn forward" type="button" aria-label="Maju 10 detik">10↻</button>
+          <button class="audio-btn next" type="button" aria-label="Dzikir berikutnya">»</button>
+          <span class="audio-status"></span>
+        </div>
+      </article>
+    </template>
+
+    <script src="public/data/dzikir-data.js" defer></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>

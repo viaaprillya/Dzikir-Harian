@@ -1,0 +1,18 @@
+{
+  "name": "Dzikir Harian",
+  "short_name": "Dzikir",
+  "description": "Dzikir pagi dan petang dengan progress harian, riwayat, dan pengaturan tampilan.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "public/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
